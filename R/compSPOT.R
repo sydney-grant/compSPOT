@@ -14,11 +14,27 @@
 #'
 #'
 #' @importFrom stats ks.test
-#' @import ggplot2
+#' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 stat_ecdf
+#' @importFrom ggplot2 theme
+#' @importFrom ggplot2 theme_classic
+#' @importFrom ggplot2 scale_color_manual
+#' @importFrom ggplot2 element_text
+#' @importFrom ggplot2 geom_point
+#' @importFrom ggplot2 geom_vline
+#' @importFrom ggplot2 xlab
+#' @importFrom ggplot2 ylab
+#' @importFrom ggplot2 geom_violin
+#' @importFrom ggplot2 scale_fill_manual
+#' @importFrom ggplot2 geom_smooth
+#' @importFrom plotly ggplotly
 #' @importFrom magrittr %>%
-#' @import plotly
+#' @importFrom plotly plot_ly
+#' @importFrom plotly add_trace
+#' @importFrom plotly layout
 #' @importFrom ggpubr stat_cor
-#' @importFrom ggpubr stat_compare_means
+#' @importFrom ggpubr ggarrange
 #' @importFrom utils combn
 #' @importFrom stats wilcox.test
 #' @importFrom gridExtra grid.arrange

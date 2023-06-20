@@ -7,8 +7,25 @@
 #' @details
 #' This function compares the mutation frequency per sample for each hotspot in a violin plot.
 #'
-#' @import plotly
-#' @import ggplot2
+#' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 stat_ecdf
+#' @importFrom ggplot2 theme
+#' @importFrom ggplot2 theme_classic
+#' @importFrom ggplot2 scale_color_manual
+#' @importFrom ggplot2 element_text
+#' @importFrom ggplot2 geom_point
+#' @importFrom ggplot2 geom_vline
+#' @importFrom ggplot2 xlab
+#' @importFrom ggplot2 ylab
+#' @importFrom ggplot2 geom_violin
+#' @importFrom ggplot2 scale_fill_manual
+#' @importFrom ggplot2 geom_smooth
+#' @importFrom plotly ggplotly
+#' @importFrom magrittr %>%
+#' @importFrom plotly plot_ly
+#' @importFrom plotly add_trace
+#' @importFrom plotly layout
 #' @importFrom gridExtra grid.arrange
 #' @importFrom magrittr %>%
 #' @param plot_data a dataframe containing the hotspot, mutation count, and associated groups
@@ -24,6 +41,7 @@
 #' data("plot_data")
 #' fig <- plot.spot(plot_data = plot_data, group1 = "High-Risk", group2 = "Low-Risk")
 #'
+#' @noRd
 
 
 plot.spot <- function(plot_data, group1, group2) {
@@ -44,10 +62,10 @@ plot.spot <- function(plot_data, group1, group2) {
         scalegroup = group1,
         name = group1,
         box = list(
-          visible = T
+          visible = TRUE
         ),
         meanline = list(
-          visible = T
+          visible = TRUE
         ),
         color = I("brown4")
       )
@@ -59,10 +77,10 @@ plot.spot <- function(plot_data, group1, group2) {
         scalegroup = group2,
         name = group2,
         box = list(
-          visible = T
+          visible = TRUE
         ),
         meanline = list(
-          visible = T
+          visible = TRUE
         ),
         color = I("darksalmon")
       )
@@ -70,27 +88,27 @@ plot.spot <- function(plot_data, group1, group2) {
       plotly::layout(
         xaxis = list( title = "Hotspot"),
         yaxis = list( title = "Mutation Count",
-                      zeroline = F
+                      zeroline = FALSE
         ),
         violinmode = 'group'
       )
     plot2_list <- c()
-    for (i in 1:length(unique(plot_data$Hotspot))){
+    for (i in seq_len(length(unique(plot_data$Hotspot)))){
       spot <- unique(plot_data$Hotspot)[[i]]
       plot_data.sub <- subset(plot_data, Hotspot == spot)
       plot2 <- ggplot2::ggplot(data = plot_data.sub, ggplot2::aes(x=Mutation_Count, group = Group, col = Group)) +
         ggplot2::stat_ecdf(geom = "point") +
         ggplot2::theme_classic() +
-        ggplot2::scale_color_manual(values = c("brown4", "darksalmon")) +
-      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 0.5, hjust=0.5, size = 12),
-            axis.title.y = ggplot2::element_text(size = 12), axis.title.x = ggplot2::element_text(size = 12), axis.title = ggplot2::element_text(size = 4),
-            axis.text.y = ggplot2::element_text(size = 12), plot.title = ggplot2::element_text(hjust = 0.5, size = 12))
+        ggplot2::scale_color_manual(values = c("brown4", "darksalmon"))
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=0.5, size = 10),
+                     axis.title.y = ggplot2::element_text(size = 12), axis.title.x = ggplot2::element_text(size = 12), axis.title = ggplot2::element_text(size = 4),
+                     axis.text.y = ggplot2::element_text(size = 12), plot.title = ggplot2::element_text(hjust = 0.5, size = 12))
       plot2_list[[i]] <- plot2
     }
   }
   output <- c()
   output[[1]] <- fig
-  output[[2]] <- plot2_list
+  output[[2]] <- ggpubr::ggarrange(plotlist = plot2_list,nrow=2, ncol = ceiling(length(plot2_list)/2))
   return(output)
 }
 
@@ -170,12 +188,12 @@ group.spot <- function(data, regions, pvalue, threshold, name1, name2, include_g
                                         & Position %in% regions$Lowerbound[[i]]:regions$Upperbound[[i]])))
     }
     if (include_genes == TRUE){
-    spot_data <- data.frame("Hotspot" = paste(regions$Gene[[i]], " ", regions$Chromosome[[i]],
-                                              ":", regions$Lowerbound[[i]], "-",
-                                              regions$Upperbound[[i]], sep = ""),
-                            "Group" = c(rep(name1, length(count_1)),
-                                        rep(name2, length(count_2))),
-                            "Mutation_Count" = c(count_1, count_2))
+      spot_data <- data.frame("Hotspot" = paste(regions$Gene[[i]], " ", regions$Chromosome[[i]],
+                                                ":", regions$Lowerbound[[i]], "-",
+                                                regions$Upperbound[[i]], sep = ""),
+                              "Group" = c(rep(name1, length(count_1)),
+                                          rep(name2, length(count_2))),
+                              "Mutation_Count" = c(count_1, count_2))
     }
     if (include_genes == FALSE){
       spot_data <- data.frame("Hotspot" = paste(regions$Chromosome[[i]],
@@ -188,22 +206,22 @@ group.spot <- function(data, regions, pvalue, threshold, name1, name2, include_g
     }
     plot_data <- rbind(plot_data, spot_data)
     if (sum(c(count_1, count_2)) > 0){
-    suppressWarnings({ks <- ks.test(count_1, count_2, alternative = "two.sided")})
+      ks <- ks.test(count_1, count_2, alternative = "two.sided")
       if (ks$p.value < pvalue){
-      if (sum(count_1) > sum(count_2)){high_group <- "Group 1"}
-      else{high_group <- "Group 2"}
+        if (sum(count_1) > sum(count_2)){high_group <- "Group 1"}
+        else{high_group <- "Group 2"}
         if (include_genes == TRUE){
-    diff_hotspots <- data.frame("D" = ks$statistic, "pval" = ks$p.value, "Higher Group" = high_group, "Hotspot" = paste(regions$Gene[[i]], " ", regions$Chromosome[[i]],
-                                                                 ":", regions$Lowerbound[[i]], "-",regions$Upperbound[[i]], sep = ""))
+          diff_hotspots <- data.frame("D" = ks$statistic, "pval" = ks$p.value, "Higher Group" = high_group, "Hotspot" = paste(regions$Gene[[i]], " ", regions$Chromosome[[i]],
+                                                                                                                              ":", regions$Lowerbound[[i]], "-",regions$Upperbound[[i]], sep = ""))
         }
         if (include_genes == FALSE){
           diff_hotspots <- data.frame("D" = ks$statistic, "pval" = ks$p.value, "Higher Group" = high_group, "Hotspot" = paste(regions$Chromosome[[i]],
                                                                                                                               ":", regions$Lowerbound[[i]], "-",regions$Upperbound[[i]], sep = ""))
         }
-    all_diff <- rbind(all_diff, diff_hotspots)
+        all_diff <- rbind(all_diff, diff_hotspots)
 
-        }
       }
+    }
   }
   plot <- plot.spot(plot_data, group1 = name1, group2 = name2)
   return_items <- c()

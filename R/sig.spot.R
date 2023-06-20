@@ -17,11 +17,12 @@
 #' data("mutation_data")
 #' spot.rank(data = mutation_data, regions = ea_regions, include_genes = TRUE)
 #'
+#'@noRd
 
 
 spot.rank <- function(data, regions, include_genes){
   ranked_regions <- data.frame()
-  for (i in 1:nrow(regions)){
+  for (i in seq_len(nrow(regions))){
     data_sub <- subset(data, Chromosome == regions$Chromosome[[i]] &
                          Position %in% regions$Lowerbound[[i]]:regions$Upperbound[[i]])
     if (include_genes == TRUE){
@@ -54,7 +55,17 @@ spot.rank <- function(data, regions, include_genes){
 #' created using the same data used in the Kolmogorov-Smirnov calculation to show a visualization of the ECDF
 #' of hotspots vs non-hotspots.
 #'
-#' @import ggplot2
+#' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 stat_ecdf
+#' @importFrom ggplot2 theme
+#' @importFrom ggplot2 theme_classic
+#' @importFrom ggplot2 scale_color_manual
+#' @importFrom ggplot2 element_text
+#' @importFrom ggplot2 geom_point
+#' @importFrom ggplot2 geom_vline
+#' @importFrom ggplot2 xlab
+#' @importFrom ggplot2 ylab
 #' @importFrom plotly ggplotly
 #' @param df1 a dataframe containing the labeled region number, type of region, percentage of samples with
 #' hotspot mutation
@@ -71,32 +82,31 @@ spot.rank <- function(data, regions, include_genes){
 #' data("ecdf_df")
 #' plot <- plot.sigspot(df1 = region, df2 = ecdf_df)
 #'
+#'@noRd
 
 
 plot.sigspot <- function(df1, df2){
   plot1 <- ggplot2::ggplot(df1, aes(y = percent, x = number,text = paste("Label",Label))) +
     ggplot2::geom_point(data = subset(df1, type == "Hotspot"),
-               color = "brown4", fill = "brown4", alpha = 1, shape = 21, size = 1.5) +
+                        color = "brown4", fill = "brown4", alpha = 1, shape = 21, size = 1.5) +
     ggplot2::geom_point(data = subset(df1, type == "Non-hotspot"),
-                 color = "darksalmon", fill = "darksalmon", alpha = 1, shape = 21, size = 1.5) +
+                        color = "darksalmon", fill = "darksalmon", alpha = 1, shape = 21, size = 1.5) +
     ggplot2::geom_vline(xintercept = (nrow(subset(df1, type == "Hotspot")) + 1), linetype = "longdash",
-                 linewidth = 0.5) +
+                        linewidth = 0.5) +
     ggplot2::theme_classic() +
     ggplot2::ylab("Percentage of Samples \n with Hotspot Mutation") +
     ggplot2::xlab("Ranked Region Number") +
     ggplot2::theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=0.5, size = 12),
-            axis.title.y = element_text(size = 12), axis.title.x = element_text(size = 12), axis.title = element_text(size = 4),
-            axis.text.y = element_text(size = 12), plot.title = element_text(hjust = 0.5, size = 12))
+                   axis.title.y = element_text(size = 12), axis.title.x = element_text(size = 12), axis.title = element_text(size = 4),
+                   axis.text.y = element_text(size = 12), plot.title = element_text(hjust = 0.5, size = 12))
   plot1 <- plotly::ggplotly(plot1, tooltip =  c("text"))
   plot2 <- ggplot2::ggplot(data = df2, aes(x=Count, group = Group, col = Group)) +
     ggplot2::stat_ecdf(geom = "point") +
     ggplot2::theme_classic() +
     ggplot2::scale_color_manual(values = c("brown4", "darksalmon"))
   ggplot2::theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=0.5, size = 12),
-          axis.title.y = element_text(size = 12), axis.title.x = element_text(size = 12), axis.title = element_text(size = 4),
-          axis.text.y = element_text(size = 12), plot.title = element_text(hjust = 0.5, size = 12))
-  ggplot2::labs(title="Empirical Cumulative \nDensity Function",
-         y = "Fraction of Group with Count", x="Mutation Count")+ theme(plot.title = element_text(hjust = 0.5))
+                 axis.title.y = element_text(size = 12), axis.title.x = element_text(size = 12), axis.title = element_text(size = 4),
+                 axis.text.y = element_text(size = 12), plot.title = element_text(hjust = 0.5, size = 12))
   plot2 <- plotly::ggplotly(plot2, tooltip =  c("text"))
   output <- c()
   output[[1]] <- plot1
@@ -121,8 +131,6 @@ plot.sigspot <- function(df1, df2){
 #' threshold is not met. Once this cutoff has been reached, an established list of mutation hotspots is provided.
 #'
 #' @importFrom stats ks.test
-#' @import ggplot2
-#' @importFrom plotly ggplotly
 #' @param data a dataframe containing the chromosome, base pair position, and optionally gene name of each mutation
 #' @param regions a dataframe containing the chromosome, start and end base pair position of each region of interest
 #' @param pvalue the p-value cutoff for included hotspots
@@ -169,12 +177,12 @@ sig.spots <- function(data, regions, pvalue, threshold, include_genes, rank){
   if (threshold < 0){stop("threshold cannot be less than 0")}
   if (base::isFALSE(rank) & base::isFALSE("Count" %in% colnames(data))){
     stop("input data must contain column 'Count', or set rank = TRUE")}
-  if (rank == TRUE){
+  if (base::isTRUE(rank)){
     regions <- spot.rank(data, regions, include_genes = include_genes)
   }
-  pv = pvalue - 1
-  d = threshold + 1
-  i = 1
+  pv <- pvalue - 1
+  d <- threshold + 1
+  i <- 1
   while (pv < pvalue & d > threshold){
     if (i == 2){message(paste((i-1), "Hotspot...", sep = " "))}
     if (i > 2){message(paste((i-1), "Hotspots...", sep = " "))}
@@ -193,10 +201,10 @@ sig.spots <- function(data, regions, pvalue, threshold, include_genes, rank){
     }
     reg1_list <- unlist(lapply(unique(data$Sample), fun, reg_sub = reg1))
     reg2_list <- unlist(lapply(unique(data$Sample), fun, reg_sub = reg2))
-    suppressWarnings({ks <- ks.test(reg1_list, reg2_list, alternative = "greater")})
+    ks <- ks.test(reg1_list, reg2_list, alternative = "greater")
     pv <- ks$p.value
     d <- ks$statistic
-    i = i + 1
+    i <- i + 1
   }
   sig_spots <- i-2
   ecdf_df <- data.frame("Count" = c(reg1_list, reg2_list),
@@ -205,13 +213,13 @@ sig.spots <- function(data, regions, pvalue, threshold, include_genes, rank){
   regions$type <- c(rep("Hotspot", sig_spots), rep("Non-hotspot", (nrow(regions) - sig_spots)))
   regions$percent <- regions$Count / length(unique(data$Sample)) * 100
   labels <- c()
-  if (include_genes == TRUE){
-    for (i in 1:nrow(regions)){
+  if (base::isTRUE(include_genes)){
+    for (i in seq_len(nrow(regions))){
       labels <- c(labels, paste(regions$Gene[[i]], " ", regions$Chromosome[[i]], ":", regions$Lowerbound[[i]], "-", regions$Upperbound[[i]], sep = ""))
     }
   }
-  if (include_genes == FALSE){
-    for (i in 1:nrow(regions)){
+  if (base::isFALSE(include_genes)){
+    for (i in seq_len(nrow(regions))){
       labels <- c(labels, paste(regions$Chromosome[[i]], ":", regions$Lowerbound[[i]], "-", regions$Upperbound[[i]], sep = ""))
     }
   }
