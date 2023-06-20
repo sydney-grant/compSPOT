@@ -19,11 +19,13 @@ This function classifying the features into categorical and sequential features
 and return a grid of violin plots for categorical features and scatter plot for sequential features.
 }
 \details{
-This function is used to classify the features into sequential features if values are integers or classifies them into categorical features.
+This function is used to classify the features into sequential features if values are integers or classifies them into categorical #' features.
 Sequential features are compared to the mutation count using Pearson correlation.
-Similarly, in categorical features wilcox test is used to compare between the groups in the features based on their mutational count.
+Similarly, in categorical features wilcox test is used to compare between the groups in the features based on their mutational
+count.
 Scatter plot is used to represent the sequential features along with the R and p-value from the pearson correlation.
-Similarly violin plots are used to plot the groups in the categorical data and wilcox or kruska-wallis values are shown on the graph.
+Similarly violin plots are used to plot the groups in the categorical data and wilcox or kruska-wallis values are shown on the
+graph.
 }
 \examples{
 
