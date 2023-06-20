@@ -1,3 +1,9 @@
+---
+output:
+  word_document: default
+  html_document: default
+  pdf_document: default
+---
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -21,7 +27,7 @@ Clonal cell groups share common mutations within cancer, precancer, and even cli
 
 ``` {r install package}
 if (!require("BiocManager", quietly = TRUE))
-  install.packages("BiocManager")                                                                      BiocManager::install("compSPOT")
+  install.packages("BiocManager")                                                         BiocManager::install("compSPOT")
 ```
 
 ``` {r load library}
@@ -32,6 +38,11 @@ library(compSPOT)
 
 ### Mutation Data <a name = "mutation_data"/>
 
+``` {r load data}
+data("mutation_data")
+data("region_data")
+```
+
 The mutation dataset should include the following columns:
 "Chromosome" <-- Chromosome number where mutation is located
 "Position" <-- Genomic position number where mutation is located
@@ -40,7 +51,7 @@ The mutation dataset should include the following columns:
 "Group" <-- Group classification ID (group.spot only) 
 Clinical Parameters <-- (for feature.spot only) 
 
-![Example Mutation Dataset](example_mutation_data.png)
+![](example_mutation_data.png)
 Table 1: Example structure of input mutation dataset.
 
 ### Genomic Regions <a name = "region_data"/>
@@ -53,13 +64,9 @@ The regions dataset should include the following columns:
 "Count" <-- Number of mutations in mutation dataset which are found within region (optional)
 
 
-![Example Region Dataset](example_region_data.png)
-Table 2: Example structure of input genomic regions dataset.
+![](example_region_data.png)
 
-``` {r load data}
-data("mutation_data")
-data("region_data")
-```
+Table 2: Example structure of input genomic regions dataset.
 
 ## compSPOT Functions <a name = "functions"/>
 
@@ -69,6 +76,10 @@ enrichment based on clinical and personal risk factors. All functions return bot
 based on analysis summary and data visualization components for quick and easy interpretation of results.
 
 ### Identifying Mutation Hotspots with sig.spot <a name = "sig.spot"/>
+
+```{r sig.spots}
+significant_spots <- sig.spots(data = example_mutations, regions = example_regions, pvalue = 0.05, threshold = 0.2, include_genes = TRUE, rank = TRUE)
+```
 
 Our previously published Bioconductor package seq.hotSPOT (doi: 10.3390/cancers15051612) identifies highly mutated genomic regions based on SNV datasets. While this tool can identify long lists of mutated regions, we sought to establish a method for identifying which of these genomic regions have significantly higher mutation frequency compared to others and may be used as markers of carcinogenic progression.
 
@@ -82,6 +93,12 @@ Figure 1: Example output plots from sig.spot function. Dot plot (left) indicates
 
 ### Comparison Mutation Hotspot Burden with group.spot <a name = "group.spot"/>
 
+```{r group.spot}
+hotspots <- subset(significant_spots[[1]], type == "Hotspot")
+
+group_comp <- group.spot(data = example_mutations, regions = hotspots, pval = 0.05, threshold = 0.4, name1 = "High-Risk", name2 = "Low-Risk", include_genes = TRUE)
+```
+
 Previously, we have shown mutation hotspots identified using seq.hotSPOT may be used to differentiate between samples with history of frequent vs infrequent carcinogen exposure (doi: 10.3390/cancers15051612, doi: 10.3390/ijms24097852). group.spot provides an automated approach for statistical and visual comparison between mutation enrichment of different groups of interest.
 
 
@@ -91,6 +108,11 @@ Methods: This function creates a list of mutation frequency per unique sample fo
 Figure 2: Example output plot from group.spot function. 
 
 ### Exploratory Data Analysis of Mutation Hotspot Burden and Personal Risk Factors with feature.spot <a name = "feature.spot"/>
+
+```{r feature.spot}
+features <- c("AGE", "SEX", "ADJUVANT_TX", "SMOKING_HISTORY", "TUMOR_VOLUME", "KI_67")
+feature_example <- feature.spot(data = example_mutations, regions = example_regions, feature = features)
+```
 
 Mutation enrichment in cancer mutation hotspots has been shown to relate to personal cancer risk factors such as age, gender, and carcinogen exposure history and may be used in combination to create predictive models of cancer risk (doi: 10.3390/ijms24097852). feature.spot provides a baseline analysis of any set of clinical features to identify trends in the enrichment of mutations and personal risk factors.
 
