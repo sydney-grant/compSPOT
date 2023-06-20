@@ -105,7 +105,7 @@ Previously, we have shown mutation hotspots identified using seq.hotSPOT may be 
 Methods: This function creates a list of mutation frequency per unique sample for each genomic region separated based on specified sub-groups. The regions with significant differences in mutation distribution are calculated using a Kolmogorov-Smirnov test. The difference in mutation frequency is output in a violin plot.
 
 ![Example group.spot Output](group.spot_output.png)
-Figure 2: Example output plot from group.spot function. 
+Figure 2: Example output plot from group.spot function. Violin plots (left) show the difference in mutation frequency for each unique hotspot based on specified groups of interest. Empirical Cumulative Density Function plot (right) indicates the shift in mutation frequency per sample for each hotspot between the two groups of interest.
 
 ### Exploratory Data Analysis of Mutation Hotspot Burden and Personal Risk Factors with feature.spot <a name = "feature.spot"/>
 
