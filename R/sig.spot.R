@@ -86,7 +86,7 @@ spot.rank <- function(data, regions, include_genes){
 
 
 plot.sigspot <- function(df1, df2){
-  plot1 <- ggplot2::ggplot(df1, aes(y = percent, x = number,text = paste("Label",Label))) +
+  plot1 <- ggplot2::ggplot(df1, ggplot2::aes(y = percent, x = number,text = paste("Label",Label))) +
     ggplot2::geom_point(data = subset(df1, type == "Hotspot"),
                         color = "brown4", fill = "brown4", alpha = 1, shape = 21, size = 1.5) +
     ggplot2::geom_point(data = subset(df1, type == "Non-hotspot"),
@@ -100,13 +100,13 @@ plot.sigspot <- function(df1, df2){
                    axis.title.y = element_text(size = 12), axis.title.x = element_text(size = 12), axis.title = element_text(size = 4),
                    axis.text.y = element_text(size = 12), plot.title = element_text(hjust = 0.5, size = 12))
   plot1 <- plotly::ggplotly(plot1, tooltip =  c("text"))
-  plot2 <- ggplot2::ggplot(data = df2, aes(x=Count, group = Group, col = Group)) +
+  plot2 <- ggplot2::ggplot(data = df2, ggplot2::aes(x=Count, group = Group, col = Group)) +
     ggplot2::stat_ecdf(geom = "point") +
     ggplot2::theme_classic() +
     ggplot2::scale_color_manual(values = c("brown4", "darksalmon"))
-  ggplot2::theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=0.5, size = 12),
-                 axis.title.y = element_text(size = 12), axis.title.x = element_text(size = 12), axis.title = element_text(size = 4),
-                 axis.text.y = element_text(size = 12), plot.title = element_text(hjust = 0.5, size = 12))
+  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 0.5, hjust=0.5, size = 12),
+                 axis.title.y = ggplot2::element_text(size = 12), axis.title.x = ggplot2::element_text(size = 12), axis.title = ggplot2::element_text(size = 4),
+                 axis.text.y = ggplot2::element_text(size = 12), plot.title = ggplot2::element_text(hjust = 0.5, size = 12))
   plot2 <- plotly::ggplotly(plot2, tooltip =  c("text"))
   output <- c()
   output[[1]] <- plot1
