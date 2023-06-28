@@ -1,15 +1,14 @@
 #' hotspot comparison by additional features
 #'
 #' @description
-#' This function classifying the features into categorical and sequential features
-#' and return a grid of violin plots for categorical features and scatter plot for sequential features.
+#' This function performs an exploratory data analysis comparing the relationship between user-input features to
+#' hotspot mutation burden.
 #' @details
-#' This function is used to classify the features into sequential features if values are integers or classifies them into categorical #' features.
-#' Sequential features are compared to the mutation count using Pearson correlation.
-#' Similarly, in categorical features wilcox test is used to compare between the groups in the features based on their mutational
-#' count.
+#' This function is used to classify the features into sequential features if values are numerical or classifies them into #' categorical features. Sequential features are compared to the mutation count using Pearson correlation.
+#' Similarly, in categorical features either Wilcox or Kruskal-Wallis test is used to compare between the groups in the
+#' features based on the mutational count.
 #' Scatter plot is used to represent the sequential features along with the R and p-value from the pearson correlation.
-#' Similarly violin plots are used to plot the groups in the categorical data and wilcox or kruska-wallis values are shown on the
+#' Violin plots are used to plot the groups in the categorical data and Wilcox or Kruskal-Wallis values are shown on the
 #' graph.
 #'
 #'

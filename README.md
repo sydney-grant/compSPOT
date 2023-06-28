@@ -1,9 +1,3 @@
----
-output:
-  word_document: default
-  html_document: default
-  pdf_document: default
----
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -44,10 +38,10 @@ data("region_data")
 ```
 
 The mutation dataset should include the following columns:
-"Chromosome" <-- Chromosome number where mutation is located
-"Position" <-- Genomic position number where mutation is located
+"Chromosome" <-- Chromosome number where the mutation is located
+"Position" <-- Genomic position number where the mutation is located
 "Sample" <-- Unique ID for each sample in dataset
-"Gene" <-- Name of gene which mutation is located in (optional)
+"Gene" <-- Name of the gene which mutation is located in (optional)
 "Group" <-- Group classification ID (group.spot only) 
 Clinical Parameters <-- (for feature.spot only) 
 
@@ -57,11 +51,11 @@ Table 1: Example structure of input mutation dataset.
 ### Genomic Regions <a name = "region_data"/>
 
 The regions dataset should include the following columns:
-"Chromosome" <-- Chromosome number where region is located
-"Lowerbound" <-- Genomic position number where region begins
-"Upperbound" <-- Genomic position number where region ends
-"Gene" <-- Name of gene which mutation is located in (optional)
-"Count" <-- Number of mutations in mutation dataset which are found within region (optional)
+"Chromosome" <-- Chromosome number where the region is located
+"Lowerbound" <-- Genomic position number where the region begins
+"Upperbound" <-- Genomic position number where the region ends
+"Gene" <-- Name of the gene which mutation is located in (optional)
+"Count" <-- Number of mutations in mutation dataset which are found within the region (optional)
 
 
 ![](example_region_data.png)
@@ -70,7 +64,7 @@ Table 2: Example structure of input genomic regions dataset.
 
 ## compSPOT Functions <a name = "functions"/>
 
-The compSPOT package contains three main functions for (1) selection of mutations hotspots
+The compSPOT package contains three main functions for (1) selection of mutation hotspots
 (2) comparison of hotspot mutation burden between groups, and (3) comparison of mutation hotspot
 enrichment based on clinical and personal risk factors. All functions return both numerical outputs
 based on analysis summary and data visualization components for quick and easy interpretation of results.
@@ -84,7 +78,7 @@ significant_spots <- sig.spots(data = example_mutations, regions = example_regio
 Our previously published Bioconductor package seq.hotSPOT (doi: 10.3390/cancers15051612) identifies highly mutated genomic regions based on SNV datasets. While this tool can identify long lists of mutated regions, we sought to establish a method for identifying which of these genomic regions have significantly higher mutation frequency compared to others and may be used as markers of carcinogenic progression.
 
 
-Methods: This function begins by measuring the mutation frequency for each unique sample for each provided genomic region. Beginning with the top ranked hotspot, a Kolmogorov-Smirnov test is preformed on the mutation frequency of the top genomic region compared to the normalized mutation frequency of all the lower-ranked regions. This continues, then running the Kolmogorov-Smirnov test for the normalized mutation frequency of the top 2 genomic regions compared to the normalized mutation frequency of all lower-ranked regions. This process repeats itself, continuously adding an additional genomic regions each time until either the set p-value or empirical distribution threshold is not met. Once this cutoff has been reached, an established list of mutation hotspots is provided.
+Methods: This function begins by measuring the mutation frequency for each unique sample for each provided genomic region. Beginning with the top-ranked hotspot, a Kolmogorov-Smirnov test is performed on the mutation frequency of the top genomic region compared to the normalized mutation frequency of all the lower-ranked regions. This continues, then running the Kolmogorov-Smirnov test for the normalized mutation frequency of the top 2 genomic regions compared to the normalized mutation frequency of all lower-ranked regions. This process repeats itself, continuously adding an additional genomic regions each time until either the set p-value or empirical distribution threshold is not met. Once this cutoff has been reached, an established list of mutation hotspots is provided.
 
 
 
