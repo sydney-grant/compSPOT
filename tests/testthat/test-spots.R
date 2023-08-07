@@ -1,6 +1,9 @@
 data("example_mutations")
 data("example_regions")
-spots <- sig.spots(data = example_mutations, regions = example_regions, pvalue = 0.05, threshold = 0.2,
+
+pval <- 0.05
+thres <- 0.2
+spots <- sig.spots(data = example_mutations, regions = example_regions, pvalue = pval, threshold = thres,
                    include_genes = TRUE, rank = TRUE)
 
 
@@ -14,7 +17,7 @@ test_that("spots are valid", {
   pv <- ks$p.value
   d <- ks$statistic
 
-  if (pv < pvalue & d > threshold){check = "yes"}
+  if (pv < pval & d > thres){check = "yes"}
   else{check = "no"}
 
   expect_equal(check, "yes")
