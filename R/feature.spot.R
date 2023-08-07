@@ -13,7 +13,7 @@
 #'
 #'
 #' @param data A dataframe containing the clinical features and the mutation count.
-#' @param features A dataframe containing all the features.
+#' @param feature A dataframe containing all the features.
 #' @importFrom ggplot2 ggplot
 #' @importFrom ggplot2 aes
 #' @importFrom ggplot2 theme

@@ -46,7 +46,7 @@
 #' @param rank true or false whether regions dataframe is already ranked and includes mutation count of total dataset
 #' @param name1 a string containing the name of one group for the comparison
 #' @param name2 a string containing the name of the second group for the comparison
-#' @param features A dataframe containing all the features.
+#' @param feature A dataframe containing all the features.
 #'
 #'@examples
 #'
