@@ -14,6 +14,7 @@
 #'
 #' @param data A dataframe containing the clinical features and the mutation count.
 #' @param feature A dataframe containing all the features.
+#' @param regions a dataframe containing the chromosome, start and end base pair position of each region of interest
 #' @importFrom ggplot2 ggplot
 #' @importFrom ggplot2 aes
 #' @importFrom ggplot2 theme
