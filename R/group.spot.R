@@ -128,10 +128,11 @@ plot.spot <- function(plot_data, group1, group2) {
 #' @import plotly
 #' @param data a dataframe containing the chromosome, base pair position, and optionally gene name of each mutation
 #' @param regions a dataframe containing the chromosome, start and end base pair position of each region of interest
-#' @param pval a threshold p-value for Kolmogorov-Smirnov test
+#' @param pvalue a threshold p-value for Kolmogorov-Smirnov test
 #' @param threshold the cutoff empirical distribution for Kolmogorov-Smirnov test
 #' @param name1 a string containing the name of one group for the comparison
 #' @param name2 a string containing the name of the second group for the comparison
+#' @param include_genes true or false whether gene names are included in regions dataframe
 #'
 #' @return A dataframe containing the genomic regions with significant mutation frequency and summary plots for
 #' mutation comparison between groups
@@ -140,7 +141,7 @@ plot.spot <- function(plot_data, group1, group2) {
 #'
 #' data("example_mutations")
 #' data("example_regions")
-#' group.spot(data = example_mutations, regions = example_regions, pval = 0.05, threshold = 0.4,
+#' group.spot(data = example_mutations, regions = example_regions, pvalue = 0.05, threshold = 0.4,
 #' name1 = "High-Risk", name2 = "Low-Risk", include_genes = TRUE)
 #'
 #' @export
