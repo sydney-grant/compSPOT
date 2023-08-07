@@ -7,8 +7,8 @@ spots <- sig.spots(data = example_mutations, regions = example_regions, pvalue =
 test_that("spots are valid", {
   hotspots <- subset(spots[[1]], type == "Hotspot")
   nonhotspots <- subset(spots[[1]], type == "Non-hotspot")
-  h_count <- hotspots$Count / length(unique(data$Sample))
-  nh_count <- nonhotspots$Count / length(unique(data$Sample))
+  h_count <- hotspots$Count / length(unique(example_mutations$Sample))
+  nh_count <- nonhotspots$Count / length(unique(example_mutations$Sample))
 
   suppressWarnings({ks <- ks.test(h_count, nh_count, alternative = "greater")})
   pv <- ks$p.value
