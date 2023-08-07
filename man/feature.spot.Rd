@@ -9,7 +9,9 @@ feature.spot(data, regions, feature)
 \arguments{
 \item{data}{A dataframe containing the clinical features and the mutation count.}
 
-\item{features}{A dataframe containing all the features.}
+\item{regions}{a dataframe containing the chromosome, start and end base pair position of each region of interest}
+
+\item{feature}{A dataframe containing all the features.}
 }
 \value{
 A grid of all the violin plots for the categorical data and scatter plot for the sequential data.
