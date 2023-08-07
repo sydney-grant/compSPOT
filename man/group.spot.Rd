@@ -11,13 +11,15 @@ group.spot(data, regions, pvalue, threshold, name1, name2, include_genes)
 
 \item{regions}{a dataframe containing the chromosome, start and end base pair position of each region of interest}
 
+\item{pvalue}{a threshold p-value for Kolmogorov-Smirnov test}
+
 \item{threshold}{the cutoff empirical distribution for Kolmogorov-Smirnov test}
 
 \item{name1}{a string containing the name of one group for the comparison}
 
 \item{name2}{a string containing the name of the second group for the comparison}
 
-\item{pval}{a threshold p-value for Kolmogorov-Smirnov test}
+\item{include_genes}{true or false whether gene names are included in regions dataframe}
 }
 \value{
 A dataframe containing the genomic regions with significant mutation frequency and summary plots for
@@ -35,7 +37,7 @@ calculated using a Kolmogorov-Smirnov test. The difference in mutation frequency
 
 data("example_mutations")
 data("example_regions")
-group.spot(data = example_mutations, regions = example_regions, pval = 0.05, threshold = 0.4,
+group.spot(data = example_mutations, regions = example_regions, pvalue = 0.05, threshold = 0.4,
 name1 = "High-Risk", name2 = "Low-Risk", include_genes = TRUE)
 
 }
