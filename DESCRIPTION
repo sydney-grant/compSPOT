@@ -1,20 +1,39 @@
 Package: compSPOT
 Type: Package
-Title: compSPOT: Tool for identifying and comparing significantly mutated genomic hotspots
-Version: 0.99.9
+Title: compSPOT: Tool for identifying and comparing significantly mutated 
+    genomic hotspots
+Version: 0.99.10
 Authors@R: c(
-  person("Sydney", "Grant", email = "Sydney.Grant@roswellpark.org", role = c("aut", "cre")),
-  person("Ella", "Sampson", email = "ellasamp@buffalo.edu", role = c("aut")),
-  person("Rhea", "Rodrigues", email = "RheaCarmelGlen.Rodrigues@roswellpark.org", role = c("aut")),
-  person("Gyorgy", "Paragh", email = "Gyorgy.Paragh@roswellpark.org", role = c("aut")))
-Description: Clonal cell groups share common mutations within cancer, precancer, and even clinically normal appearing tissues. The frequency and location of these mutations may predict prognosis and cancer risk. It has also been well established that certain genomic regions have increased sensitivity to acquiring mutations. Mutation-sensitive genomic regions may therefore serve as markers for predicting cancer risk. This package contains multiple functions to establish significantly mutated hotspots, compare hotspot mutation burden between samples, and perform exploratory data analysis of the correlation between hotspot mutation burden and personal risk factors for cancer, such as age, gender, and history of carcinogen exposure. This package allows users to identify robust genomic markers to help establish cancer risk.
+    person("Sydney", "Grant", email = "Sydney.Grant@roswellpark.org", 
+    role = c("aut", "cre"), 
+    comment = c(ORCID = "0000-0003-1849-5921")),
+    person("Ella", "Sampson", email = "ellasamp@buffalo.edu", role = c("aut")),
+    person("Rhea", "Rodrigues", 
+    email = "RheaCarmelGlen.Rodrigues@roswellpark.org", 
+    role = c("aut"), comment = c(ORCID = "0000-0002-8573-8658")),
+    person("Gyorgy", "Paragh", email = "Gyorgy.Paragh@roswellpark.org", 
+    role = c("aut"), comment = c(ORCID = "0000-0002-6612-9267")))
+Description: Clonal cell groups share common mutations within cancer, precancer, 
+    and even clinically normal appearing tissues. The frequency and location of 
+    these mutations may predict prognosis and cancer risk. It has also been well 
+    established that certain genomic regions have increased sensitivity to 
+    acquiring mutations. Mutation-sensitive genomic regions may therefore serve 
+    as markers for predicting cancer risk. This package contains multiple 
+    functions to establish significantly mutated hotspots, compare hotspot 
+    mutation burden between samples, and perform exploratory data analysis of 
+    the correlation between hotspot mutation burden and personal risk factors 
+    for cancer, such as age, gender, and history of carcinogen exposure. This 
+    package allows users to identify robust genomic markers to help establish 
+    cancer risk.
 License: Artistic-2.0
 Encoding: UTF-8
 LazyData: FALSE
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
-biocViews: Software, Technology, Sequencing, DNASeq, WholeGenome, Classification, SingleCell, Survival
-Imports: stats, base, ggplot2, plotly, magrittr, ggpubr, gridExtra, utils
+biocViews: Software, Technology, Sequencing, DNASeq, WholeGenome, 
+    Classification, SingleCell, Survival, MultipleComparison
+Imports: stats, base, ggplot2, plotly, magrittr, ggpubr, gridExtra, utils, 
+    data.table
 Suggests: 
     BiocStyle,
     knitr,
@@ -24,3 +43,4 @@ VignetteBuilder: knitr
 URL: https://github.com/sydney-grant/compSPOT
 BugReports: https://github.com/sydney-grant/compSPOT/issues 
 Config/testthat/edition: 3
+Depends: R (>= 4.3.1)
