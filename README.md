@@ -13,15 +13,38 @@
 
 ## Introduction to compSPOT <a name="introduction"/>
 
-Clonal cell groups share common mutations within cancer, precancer, and even clinically normal appearing tissues. The frequency and location of these mutations may predict prognosis and cancer risk. It has also been well established that certain genomic regions have increased sensitivity to acquiring mutations. Mutation-sensitive genomic regions may therefore serve as markers for predicting cancer risk. This package contains multiple functions to establish significantly mutated hotspots, compare hotspot mutation burden between samples, and perform exploratory data analysis of the correlation between hotspot mutation burden and personal risk factors for cancer, such as age, gender, and history of carcinogen exposure. This package allows users to identify robust genomic markers to help establish cancer risk.
+Clonal cell groups share common mutations within cancer, precancer, and even 
+clinically normal appearing tissues. The frequency and location of these 
+mutations may predict prognosis and cancer risk. It has also been well 
+established that certain genomic regions have increased sensitivity to acquiring 
+mutations. Mutation-sensitive genomic regions may therefore serve as markers 
+for predicting cancer risk. This package contains multiple functions to 
+establish significantly mutated hotspots, compare hotspot mutation burden 
+between samples, and perform exploratory data analysis of the correlation 
+between hotspot mutation burden and personal risk factors for cancer, such as 
+age, gender, and history of carcinogen exposure. This package allows users to 
+identify robust genomic markers to help establish cancer risk.
+
+Currently, minimal resources exist which enable researchers to design their own 
+targeted sequencing panels based on specific biological questions and tissues 
+of interest. `compSPOT` has been designed to work sequentially with Bioconductor 
+package `seq.hotSPOT`. Highly mutated genomic regions identified by `seq.hotSPOT` 
+may be used for discovery of significant mutation hotspots with `compSPOT`. 
+`compSPOT` may also be used to discover differences in hotspot mutation burden 
+between different groups of interest, and the association of mutation burden with 
+clinical features. `compSPOT` may be used in combination with the Bioconductor 
+package `RTCGA.mutations`, which can be used to pull mutation datasets from the 
+TCGA database to be used as input data in various cancer types. Additionally, 
+the package `RTCGA.clinical` may be also used to identify highly mutated regions 
+in subsets of patients with specific clinical features of interest.
 
 
 ## Installation & Setup <a name="load_package"/>
 
-
 ``` {r install package}
 if (!require("BiocManager", quietly = TRUE))
-  install.packages("BiocManager")                                                         BiocManager::install("compSPOT")
+install.packages("BiocManager")                                                         
+BiocManager::install("compSPOT")
 ```
 
 ``` {r load library}
@@ -32,33 +55,29 @@ library(compSPOT)
 
 ### Mutation Data <a name = "mutation_data"/>
 
-``` {r load data}
-data("mutation_data")
-data("region_data")
-```
+The mutation dataset should include the following columns:\
+"Chromosome" <-- Chromosome number where the mutation is located\
+"Position" <-- Genomic position number where the mutation is located\
+"Sample" <-- Unique ID for each sample in dataset\
+"Gene" <-- Name of the gene which mutation is located in (optional)\
+"Group" <-- Group classification ID (for compare_groups only)\
+Clinical Parameters <-- (for compare_features only)
 
-The mutation dataset should include the following columns:
-"Chromosome" <-- Chromosome number where the mutation is located
-"Position" <-- Genomic position number where the mutation is located
-"Sample" <-- Unique ID for each sample in dataset
-"Gene" <-- Name of the gene which mutation is located in (optional)
-"Group" <-- Group classification ID (group.spot only) 
-Clinical Parameters <-- (for feature.spot only) 
-
-![](example_mutation_data.png)
+![](README_Images\\example_mutation_data.png)
 Table 1: Example structure of input mutation dataset.
 
 ### Genomic Regions <a name = "region_data"/>
 
-The regions dataset should include the following columns:
-"Chromosome" <-- Chromosome number where the region is located
-"Lowerbound" <-- Genomic position number where the region begins
-"Upperbound" <-- Genomic position number where the region ends
-"Gene" <-- Name of the gene which mutation is located in (optional)
-"Count" <-- Number of mutations in mutation dataset which are found within the region (optional)
+The regions dataset should include the following columns:\
+"Chromosome" <-- Chromosome number where the region is located\
+"Lowerbound" <-- Genomic position number where the region begins\
+"Upperbound" <-- Genomic position number where the region ends\
+"Gene" <-- Name of the gene which mutation is located in (optional)\
+"Count" <-- Number of mutations in mutation dataset which are found within the
+region (optional)
 
 
-![](example_region_data.png)
+![](README_Images\\example_region_data.png)
 
 Table 2: Example structure of input genomic regions dataset.
 
@@ -69,52 +88,95 @@ The compSPOT package contains three main functions for (1) selection of mutation
 enrichment based on clinical and personal risk factors. All functions return both numerical outputs
 based on analysis summary and data visualization components for quick and easy interpretation of results.
 
-### Identifying Mutation Hotspots with sig.spot <a name = "sig.spot"/>
+### Identifying Mutation Hotspots with find_hotspots <a name = "sig.spot"/>
 
-```{r sig.spots}
-significant_spots <- sig.spots(data = example_mutations, regions = example_regions, pvalue = 0.05, threshold = 0.2, include_genes = TRUE, rank = TRUE)
-```
-
-Our previously published Bioconductor package seq.hotSPOT (doi: 10.3390/cancers15051612) identifies highly mutated genomic regions based on SNV datasets. While this tool can identify long lists of mutated regions, we sought to establish a method for identifying which of these genomic regions have significantly higher mutation frequency compared to others and may be used as markers of carcinogenic progression.
-
-
-Methods: This function begins by measuring the mutation frequency for each unique sample for each provided genomic region. Beginning with the top-ranked hotspot, a Kolmogorov-Smirnov test is performed on the mutation frequency of the top genomic region compared to the normalized mutation frequency of all the lower-ranked regions. This continues, then running the Kolmogorov-Smirnov test for the normalized mutation frequency of the top 2 genomic regions compared to the normalized mutation frequency of all lower-ranked regions. This process repeats itself, continuously adding an additional genomic regions each time until either the set p-value or empirical distribution threshold is not met. Once this cutoff has been reached, an established list of mutation hotspots is provided.
+Our previously published Bioconductor package `seq.hotSPOT` 
+(doi: 10.3390/cancers15051612) identifies highly mutated genomic regions based 
+on SNV datasets. While this tool can identify long lists of mutated regions, 
+we sought to establish a method for identifying which of these genomic regions 
+have significantly higher mutation frequency compared to others and may be used 
+as markers of carcinogenic progression.
 
 
+Methods: This function begins by measuring the mutation frequency for each 
+unique sample for each provided genomic region. Beginning with the top-ranked 
+hotspot, a Kolmogorov-Smirnov test is performed on the mutation frequency of 
+the top genomic region compared to the normalized mutation frequency of all the 
+lower-ranked regions. This continues, then running the Kolmogorov-Smirnov test 
+for the normalized mutation frequency of the top 2 genomic regions compared to 
+the normalized mutation frequency of all lower-ranked regions. This process 
+repeats itself, continuously adding an additional genomic regions each time 
+until either the set p-value or empirical distribution threshold is not met. 
+Once this cutoff has been reached, an established list of mutation hotspots is 
+provided.
 
-![Example sig.spot Output](sig.spot_output.png)
-Figure 1: Example output plots from sig.spot function. Dot plot (left) indicates the mutation frequency for each genomic region. Regions which were found to be significantly mutated are shown in dark red, while non-significantly mutated regions are shown in pink. Vertical line indicates the cutoff point of significantly mutated hotspots. Empirical Cumulative Density Function plot (right) indicates the shift in mutation frequency per sample in comparison between mutation hotspots and non-hotspots.
+![](README_Images\\find_hotspots_output1.png)
 
-### Comparison Mutation Hotspot Burden with group.spot <a name = "group.spot"/>
+Figure 1A: Example output plots from find_hotspots function. Dot plot indicates the 
+mutation frequency for each genomic region. Regions which were found to be 
+significantly mutated are shown in dark red, while non-significantly mutated 
+regions are shown in pink. Vertical line indicates the cutoff point of 
+significantly mutated hotspots.
 
-```{r group.spot}
-hotspots <- subset(significant_spots[[1]], type == "Hotspot")
+![](README_Images\\find_hotspots_output2.png)
 
-group_comp <- group.spot(data = example_mutations, regions = hotspots, pval = 0.05, threshold = 0.4, name1 = "High-Risk", name2 = "Low-Risk", include_genes = TRUE)
-```
+Figure 1B: Empirical Cumulative Density Function plot indicates the shift in 
+mutation frequency per sample in comparison between mutation hotspots and 
+non-hotspots.
 
-Previously, we have shown mutation hotspots identified using seq.hotSPOT may be used to differentiate between samples with history of frequent vs infrequent carcinogen exposure (doi: 10.3390/cancers15051612, doi: 10.3390/ijms24097852). group.spot provides an automated approach for statistical and visual comparison between mutation enrichment of different groups of interest.
+### Comparison Mutation Hotspot Burden with compare_groups <a name = "group.spot"/>
 
-
-Methods: This function creates a list of mutation frequency per unique sample for each genomic region separated based on specified sub-groups. The regions with significant differences in mutation distribution are calculated using a Kolmogorov-Smirnov test. The difference in mutation frequency is output in a violin plot.
-
-![Example group.spot Output](group.spot_output.png)
-Figure 2: Example output plot from group.spot function. Violin plots (left) show the difference in mutation frequency for each unique hotspot based on specified groups of interest. Empirical Cumulative Density Function plot (right) indicates the shift in mutation frequency per sample for each hotspot between the two groups of interest.
-
-### Exploratory Data Analysis of Mutation Hotspot Burden and Personal Risk Factors with feature.spot <a name = "feature.spot"/>
-
-```{r feature.spot}
-features <- c("AGE", "SEX", "ADJUVANT_TX", "SMOKING_HISTORY", "TUMOR_VOLUME", "KI_67")
-feature_example <- feature.spot(data = example_mutations, regions = example_regions, feature = features)
-```
-
-Mutation enrichment in cancer mutation hotspots has been shown to relate to personal cancer risk factors such as age, gender, and carcinogen exposure history and may be used in combination to create predictive models of cancer risk (doi: 10.3390/ijms24097852). feature.spot provides a baseline analysis of any set of clinical features to identify trends in the enrichment of mutations and personal risk factors.
-
-Methods: This function first classifies the features into sequential or categorical features. Sequential features are compared to the mutation count using Pearson Correlation. Similarly, in categorical features Wilcox Rank Sum and Kruska-Wallis Tests are used to compare groups within the features based on their mutational count. 
+Previously, we have shown mutation hotspots identified using seq.hotSPOT may be 
+used to differentiate between samples with history of frequent vs infrequent 
+carcinogen exposure (doi: 10.3390/cancers15051612, doi: 10.3390/ijms24097852). 
+compare_groups provides an automated approach for statistical and visual comparison 
+between mutation enrichment of different groups of interest.
 
 
-![Example feature.spot Output](feature.spot_output.png)
-Figure 3: Example output from feature.spot. An array of plots is given based on each provided feature. Features with continuous data are represented by scatter plots, while features with categorical data are represented with violin plots. Outcome from statistical analyses are displayed on each respective plot.
+Methods: This function creates a list of mutation frequency per unique sample 
+for each genomic region separated based on specified sub-groups. The regions 
+with significant differences in mutation distribution are calculated using a 
+Kolmogorov-Smirnov test. The difference in mutation frequency is output in a 
+violin plot.
+
+For this example dataset, the sig.spot function identified 6 hotspots. We will 
+use these 6 hotspots to compared the mutation burden between Lung Cancer 
+patients with high- and low-risk of disease progression.
+
+![](README_Images\\compare_groups_output1.png)
+
+Figure 2A: Example output plot from compare_groups function. Violin plots show the 
+difference in mutation frequency for each unique hotspot based on specified 
+groups of interest.
+
+![](README_Images\\compare_groups_output2.png)
+
+Figure 2B: Example output plot from group.spot function. Empirical Cumulative 
+Density Function plot indicates the shift in mutation frequency per sample for 
+each hotspot between the two groups of interest.
+
+### Exploratory Data Analysis of Mutation Hotspot Burden and Personal Risk Factors with compare_features <a name = "feature.spot"/>
+
+Mutation enrichment in cancer mutation hotspots has been shown to relate to 
+personal cancer risk factors such as age, gender, and carcinogen exposure 
+history and may be used in combination to create predictive models of cancer 
+risk (doi: 10.3390/ijms24097852). feature.spot provides a baseline analysis of 
+any set of clinical features to identify trends in the enrichment of mutations 
+and personal risk factors.
+
+Methods: This function first classifies the features into sequential or 
+categorical features. Sequential features are compared to the mutation count 
+using Pearson Correlation. Similarly, in categorical features Wilcox Rank Sum 
+and Kruska-Wallis Tests are used to compare groups within the features based on 
+their mutational count. 
+
+
+![](README_Images\\compare_features_output.png)
+
+Figure 3: Example output from compare_features. An array of plots is given based on 
+each provided feature. Features with continuous data are represented by scatter 
+plots, while features with categorical data are represented with violin plots. 
+Outcome from statistical analyses are displayed on each respective plot.
 
 
 
