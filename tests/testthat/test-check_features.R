@@ -1,4 +1,4 @@
-feature <- c("AGE", "SEX", "ADJUVANT_TX", "SMOKING_HISTORY",
+feature <- c("AGE", "SEX", "SMOKING_HISTORY",
               "TUMOR_VOLUME", "KI_67")
 
 plot_ls <- lapply(seq_along(feature), plot_features, df = sample_df, feature = feature)
