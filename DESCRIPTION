@@ -43,4 +43,4 @@ VignetteBuilder: knitr
 URL: https://github.com/sydney-grant/compSPOT
 BugReports: https://github.com/sydney-grant/compSPOT/issues 
 Config/testthat/edition: 3
-Depends: R (>= 4.3.1)
+Depends: R (>= 4.3.0)

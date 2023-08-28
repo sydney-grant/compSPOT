@@ -3,7 +3,7 @@ data("compSPOT_example_regions")
 
 pval <- 0.05
 thres <- 0.2
-spots <- sig.spots(data = example_mutations, regions = example_regions,
+spots <- find_hotspots(data = example_mutations, regions = example_regions,
                    pvalue = pval, threshold = thres,
                    include_genes = TRUE, rank = TRUE)
 
