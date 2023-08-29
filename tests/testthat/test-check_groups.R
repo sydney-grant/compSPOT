@@ -25,8 +25,14 @@ comp_test <- compare_groups(data = compSPOT_example_mutations,
 regions = hotspots, pvalue = 0.05, threshold = 0.4,
 name1 = "High-Risk", name2 = "Low-Risk", include_genes = TRUE)
 
+if (nrow(comp_test[[1]]) <= length(unique(hotspots$Label))){
+  output <- TRUE
+}
+if (nrow(comp_test[[1]]) > length(unique(hotspots$Label))){
+  output <- FALSE
+}
 
 test_that("check number significant spots", {
-  expect_lte(nrow(comp_test[[1]]), nrow(unique(hotspots$Label)))
+  expect_true(output)
 })
 

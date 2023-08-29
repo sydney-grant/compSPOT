@@ -11,37 +11,9 @@ spots <- find_hotspots(data = compSPOT_example_mutations, regions = compSPOT_exa
 test_that("spots are valid", {
   hotspots <- subset(spots[[1]], type == "Hotspot")
   nonhotspots <- subset(spots[[1]], type == "Non-hotspot")
-  count_h <- function(x){
-    count <- 0
-    sub <- subset(compSPOT_example_mutations, Sample == x)
-    for (i in seq_len(nrow(hotspots))){
-      sub2 <- subset(sub, Chromosome == hotspots$Chromosome[[i]] & Position %in%
-                       hotspots$Lowerbound[[i]]:hotspots$Upperbound[[i]])
-      count <- count + nrow(sub2)
-    }
-    return(count/nrow(hotspots))
-  }
-  count_nh <- function(x){
-    count <- 0
-    sub <- subset(compSPOT_example_mutations, Sample == x)
-    for (i in seq_len(nrow(nonhotspots))){
-      sub2 <- subset(sub, Chromosome == nonhotspots$Chromosome[[i]] & Position
-                     %in%
-                       nonhotspots$Lowerbound[[i]]:nonhotspots$Upperbound[[i]])
-      count <- count + nrow(sub2)
-    }
-    return(count/nrow(nonhotspots))
-  }
-  h_count <- lapply(unique(compSPOT_example_mutations$Sample), count_h)
-  nh_count <- lapply(unique(compSPOT_example_mutations$Sample), count_nh)
+  cutoff <- hotspots$percent[[nrow(hotspots)]]
+  if (max(nonhotspots$percent) < min(hotspots$percent)){check = TRUE}
+  else{check = FALSE}
 
-  suppressWarnings({ks <- ks.test(unlist(h_count), unlist(nh_count),
-                                  alternative = "greater")})
-  pv <- ks$p.value
-  d <- ks$statistic
-
-  if (pv <= pval & d >= thres){check = "yes"}
-  else{check = "no"}
-
-  expect_equal(check, "yes")
+  expect_true(check)
 })
