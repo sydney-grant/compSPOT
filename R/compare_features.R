@@ -20,7 +20,7 @@
 #'
 #' @examples
 #'
-#' plot_features(1, df = sample_df)
+#' plot_features(1, df = sample_df, feature = feature)
 #'
 #' @noRd
 #'

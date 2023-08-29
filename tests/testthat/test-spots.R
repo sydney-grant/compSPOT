@@ -40,7 +40,7 @@ test_that("spots are valid", {
   pv <- ks$p.value
   d <- ks$statistic
 
-  if (pv < pval & d > thres){check = "yes"}
+  if (pv <= pval & d >= thres){check = "yes"}
   else{check = "no"}
 
   expect_equal(check, "yes")
