@@ -27,6 +27,6 @@ name1 = "High-Risk", name2 = "Low-Risk", include_genes = TRUE)
 
 
 test_that("check number significant spots", {
-  expect_lte(nrow(comp_test[[1]]), nrow(unique(compSPOT_example_regions$Label)))
+  expect_lte(nrow(comp_test[[1]]), nrow(unique(hotspots$Label)))
 })
 
