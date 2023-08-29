@@ -191,7 +191,7 @@ compare_features <- function(data, regions, feature) {
   if (base::isFALSE(is.numeric(regions$Upperbound))) {
     stop("column 'Upperbound' must be in the form of numeric")
   }
-  count_mutations <- function(x, regions, data) {
+  count_mutations_features <- function(x, regions, data) {
     sub <- subset(data, Sample == x)
     count <- 0
     for (i in seq_len(nrow(regions))) {
@@ -205,7 +205,7 @@ compare_features <- function(data, regions, feature) {
     }
     return(count)
   }
-  count.ls <- lapply(unique(data$Sample), count_mutations, regions = regions, data = data)
+  count.ls <- lapply(unique(data$Sample), count_mutations_features, regions = regions, data = data)
   count.df <-
     data.frame("Sample" = unique(data$Sample),
                "Count" = unlist(count.ls))
