@@ -14,7 +14,7 @@ comp_values <- function(i, reg){
   })
 }
 
-lapply(seq_len(nrow(ranked_regions))[[-length(seq_len(nrow(ranked_regions)))]],
+lapply(1:(nrow(ranked_regions)-1),
        comp_values, reg = ranked_regions)
 
 
