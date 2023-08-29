@@ -63,7 +63,7 @@ The mutation dataset should include the following columns:\
 "Group" <-- Group classification ID (for compare_groups only)\
 Clinical Parameters <-- (for compare_features only)
 
-![](README_Images\\example_mutation_data.png)
+![Table 1](README_Images\\example_mutation_data.png)
 Table 1: Example structure of input mutation dataset.
 
 ### Genomic Regions <a name = "region_data"/>
@@ -77,7 +77,7 @@ The regions dataset should include the following columns:\
 region (optional)
 
 
-![](README_Images\\example_region_data.png)
+![Table 2](README_Images\\example_region_data.png)
 
 Table 2: Example structure of input genomic regions dataset.
 
@@ -110,7 +110,7 @@ until either the set p-value or empirical distribution threshold is not met.
 Once this cutoff has been reached, an established list of mutation hotspots is 
 provided.
 
-![](README_Images\\find_hotspots_output1.png)
+![Figure 1A](README_Images\\find_hotspots_output1.png)
 
 Figure 1A: Example output plots from find_hotspots function. Dot plot indicates the 
 mutation frequency for each genomic region. Regions which were found to be 
@@ -118,7 +118,7 @@ significantly mutated are shown in dark red, while non-significantly mutated
 regions are shown in pink. Vertical line indicates the cutoff point of 
 significantly mutated hotspots.
 
-![](README_Images\\find_hotspots_output2.png)
+![Figure 1B](README_Images\\find_hotspots_output2.png)
 
 Figure 1B: Empirical Cumulative Density Function plot indicates the shift in 
 mutation frequency per sample in comparison between mutation hotspots and 
@@ -143,13 +143,13 @@ For this example dataset, the sig.spot function identified 6 hotspots. We will
 use these 6 hotspots to compared the mutation burden between Lung Cancer 
 patients with high- and low-risk of disease progression.
 
-![](README_Images\\compare_groups_output1.png)
+![Figure 2A](README_Images\\compare_groups_output1.png)
 
 Figure 2A: Example output plot from compare_groups function. Violin plots show the 
 difference in mutation frequency for each unique hotspot based on specified 
 groups of interest.
 
-![](README_Images\\compare_groups_output2.png)
+![Figure 2B](README_Images\\compare_groups_output2.png)
 
 Figure 2B: Example output plot from group.spot function. Empirical Cumulative 
 Density Function plot indicates the shift in mutation frequency per sample for 
@@ -171,7 +171,7 @@ and Kruska-Wallis Tests are used to compare groups within the features based on
 their mutational count. 
 
 
-![](README_Images\\compare_features_output.png)
+![Figure 3](README_Images\\compare_features_output.png)
 
 Figure 3: Example output from compare_features. An array of plots is given based on 
 each provided feature. Features with continuous data are represented by scatter 

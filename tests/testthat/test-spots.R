@@ -13,7 +13,7 @@ test_that("spots are valid", {
   nonhotspots <- subset(spots[[1]], type == "Non-hotspot")
   count_h <- function(x){
     count <- 0
-    sub <- subset(example_mutations, Sample == x)
+    sub <- subset(compSPOT_example_mutations, Sample == x)
     for (i in seq_len(nrow(hotspots))){
       sub2 <- subset(sub, Chromosome == hotspots$Chromosome[[i]] & Position %in%
                        hotspots$Lowerbound[[i]]:hotspots$Upperbound[[i]])
@@ -23,7 +23,7 @@ test_that("spots are valid", {
   }
   count_nh <- function(x){
     count <- 0
-    sub <- subset(example_mutations, Sample == x)
+    sub <- subset(compSPOT_example_mutations, Sample == x)
     for (i in seq_len(nrow(nonhotspots))){
       sub2 <- subset(sub, Chromosome == nonhotspots$Chromosome[[i]] & Position
                      %in%
@@ -32,8 +32,8 @@ test_that("spots are valid", {
     }
     return(count/nrow(nonhotspots))
   }
-  h_count <- lapply(unique(example_mutations$Sample), count_h)
-  nh_count <- lapply(unique(example_mutations$Sample), count_nh)
+  h_count <- lapply(unique(compSPOT_example_mutations$Sample), count_h)
+  nh_count <- lapply(unique(compSPOT_example_mutations$Sample), count_nh)
 
   suppressWarnings({ks <- ks.test(unlist(h_count), unlist(nh_count),
                                   alternative = "greater")})
