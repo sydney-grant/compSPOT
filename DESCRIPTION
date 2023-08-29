@@ -2,7 +2,11 @@ Package: compSPOT
 Type: Package
 Title: compSPOT: Tool for identifying and comparing significantly mutated 
     genomic hotspots
+<<<<<<< HEAD
 Version: 0.99.17
+=======
+Version: 0.99.15
+>>>>>>> 109bf666cae53196682058a49779db4e66c4b9c8
 Authors@R: c(
     person("Sydney", "Grant", email = "Sydney.Grant@roswellpark.org", 
     role = c("aut", "cre"), 
