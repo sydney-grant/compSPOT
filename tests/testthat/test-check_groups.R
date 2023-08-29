@@ -9,7 +9,7 @@ significant_spots <- find_hotspots(data = compSPOT_example_mutations,
 
 hotspots <- subset(significant_spots[[1]], type == "Hotspot")
 
-plot_data <- data.table::rbindlist(lapply(seq_len(nrow(regions)),
+plot_data <- data.table::rbindlist(lapply(seq_len(nrow(compSPOT_example_regions)),
                                           count_groups))
 
 
@@ -20,6 +20,6 @@ name1 = "High-Risk", name2 = "Low-Risk", include_genes = TRUE)
 
 
 test_that("check number significant spots", {
-  expect_lte(nrow(comp_test[[1]]), nrow(unique(regions$Label)))
+  expect_lte(nrow(comp_test[[1]]), nrow(unique(compSPOT_example_regions$Label)))
 })
 
