@@ -95,7 +95,6 @@ Clinical Parameters <-- (for compare_features only)
 Loading example mutations:
 ``` {r load mutations}
 data("compSPOT_example_mutations")
-head(compSPOT_example_mutations)
 ```
 
 The regions dataset should include the following columns:
@@ -109,7 +108,6 @@ region (optional)
 Loading example regions:
 ``` {r load regions}
 data("compSPOT_example_regions")
-head(compSPOT_example_regions)
 ```
 
 ## Example Workflow
@@ -158,25 +156,6 @@ This table is stored in the first position of the output list.
 head(significant_spots[[1]])
 ```
 
-Figure 1a: Example output plots from find_hotspots function. Dot plot indicates 
-the mutation frequency for each genomic region. Regions which were found to be 
-significantly mutated are shown in dark red, while non-significantly mutated 
-regions are shown in pink. Vertical line indicates the cutoff point of 
-significantly mutated hotspots. 
-This figure is stored in the second position of the output list.
-
-```{r figure 1a}
-significant_spots[[2]]
-```
-
-Figure 1b. Empirical Cumulative Density Function plot indicates the shift in 
-mutation frequency per sample in comparison between mutation hotspots and 
-non-hotspots.
-This figure is stored in the third position of the output list.
-
-```{r figure 1b}
-significant_spots[[3]]
-```
 
 ### Comparison Mutation Hotspot Burden with compare_groups
 
@@ -216,23 +195,6 @@ This table is stored in the first position of the output list.
 group_comp[[1]]
 ```
 
-Figure 2a: Example output plot from compare_groups function. Violin plots show 
-the difference in mutation frequency for each unique hotspot based on specified 
-groups of interest.
-This figure is stored in the second position of the output list.
-
-```{r figure 2a}
-group_comp[[2]]
-```
-
-Figure 2b: Example output plot from group.spot function. Empirical Cumulative 
-Density Function plot indicates the shift in mutation frequency per sample for 
-each hotspot between the two groups of interest.
-This figure is stored in the third position of the output list.
-
-```{r figure 2b}
-group_comp[[3]]
-```
 
 ### EDA of Mutation Hotspot Burden and Personal Risk Factors with compare_features 
 
@@ -257,15 +219,6 @@ feature_example <- compare_features(data = compSPOT_example_mutations,
                                     feature = features)
 ```
 
-
-Figure 3: Example output from compare_features. An array of plots is given based 
-on each provided feature. Features with continuous data are represented by 
-scatter plots, while features with categorical data are represented with violin 
-plots. Outcome from statistical analyses are displayed on each respective plot.
-
-```{r figure 3}
-feature_example
-```
 
 
 ```{r sessionInfo, echo=FALSE}
