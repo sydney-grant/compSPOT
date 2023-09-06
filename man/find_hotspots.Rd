@@ -34,9 +34,9 @@ A list containing the following:
 \enumerate{
 \item dataframe containing the genomic regions with significant
 mutation frequency
-\item Dotplot showing the percentage of samples with mutations in each ranked
+\item plotly object Dotplot showing the percentage of samples with mutations in each ranked
 genomic region, highlighting significantly mutated hotspots
-\item ECDF plot showing the difference in mutation frequency between hotspots
+\item plotly object ECDF plot showing the difference in mutation frequency between hotspots
 and non-hotspots
 }
 }

@@ -1,4 +1,4 @@
-#' graph all features based on hotspot mutation burden
+#' plot all features based on hotspot mutation burden
 #'
 #' @description
 #' Creates a scatter plot of numerical features vs hotspot mutation burden and
@@ -13,7 +13,7 @@
 #' each feature for all samples in dataset
 #' @param feature A list containing all the features.
 #'
-#' @return graph of comparison of feature vs hotspot mutation burden in all
+#' @return ggplot objects of comparison of feature vs hotspot mutation burden in all
 #' samples
 #'
 #' @keywords internal
@@ -205,7 +205,13 @@ compare_features <- function(data, regions, feature) {
     }
     return(count)
   }
-  count.ls <- lapply(unique(data$Sample), count_mutations_features, regions = regions, data = data)
+  count.ls <-
+    lapply(
+      unique(data$Sample),
+      count_mutations_features,
+      regions = regions,
+      data = data
+    )
   count.df <-
     data.frame("Sample" = unique(data$Sample),
                "Count" = unlist(count.ls))

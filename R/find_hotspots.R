@@ -25,37 +25,32 @@
 #'
 #'@noRd
 
-spot_rank <- function(data, regions, include_genes) {
-  ranked_regions <- data.frame()
-  for (i in seq_len(nrow(regions))) {
-    data_sub <- subset(
-      data,
-      Chromosome == regions$Chromosome[[i]] &
-        Position %in% regions$Lowerbound[[i]]:regions$Upperbound[[i]]
-    )
-    if (include_genes == TRUE) {
-      ranked_row <-
-        data.frame(
-          "Chromosome" = regions$Chromosome[[i]],
-          "Lowerbound" = regions$Lowerbound[[i]],
-          "Upperbound" = regions$Upperbound[[i]],
-          "Count" = nrow(data_sub),
-          "Gene" = regions$Gene[[i]]
-        )
-    }
-    if (include_genes == FALSE) {
-      ranked_row <-
-        data.frame(
-          "Chromosome" = regions$Chromosome[[i]],
-          "Lowerbound" = regions$Lowerbound[[i]],
-          "Upperbound" = regions$Upperbound[[i]],
-          "Count" = nrow(data_sub)
-        )
-    }
-    ranked_regions <- rbind(ranked_regions, ranked_row)
+spot_rank <- function(i, data, regions, include_genes) {
+  data_sub <- subset(
+    data,
+    Chromosome == regions$Chromosome[[i]] &
+      Position %in% regions$Lowerbound[[i]]:regions$Upperbound[[i]]
+  )
+  if (include_genes == TRUE) {
+    ranked_row <-
+      data.frame(
+        "Chromosome" = regions$Chromosome[[i]],
+        "Lowerbound" = regions$Lowerbound[[i]],
+        "Upperbound" = regions$Upperbound[[i]],
+        "Count" = nrow(data_sub),
+        "Gene" = regions$Gene[[i]]
+      )
   }
-  ranked_regions <- ranked_regions[order(-ranked_regions$Count),]
-  return(ranked_regions)
+  if (include_genes == FALSE) {
+    ranked_row <-
+      data.frame(
+        "Chromosome" = regions$Chromosome[[i]],
+        "Lowerbound" = regions$Lowerbound[[i]],
+        "Upperbound" = regions$Upperbound[[i]],
+        "Count" = nrow(data_sub)
+      )
+  }
+  return(ranked_row)
 }
 
 #' create labels for final hotspot dataframe
@@ -183,10 +178,10 @@ region_counter <- function(s, reg_sub, data) {
 #' @param df2 a dataframe containing the data required for calculation
 #' of ECDF
 #'
-#' @return A figure organizing the region number in ranked order versus the
+#' @return A list of two plotly objects, one organizing the region number in ranked order versus the
 #' percentage of the sample with hotspot mutation which also denotes the
-#' label of the data point is displayed when hovering over the item. A second
-#' figure providing a visualization of the ECDF for hotspot vs non-hotspots.
+#' label of the data point is displayed when hovering over the item, and a second
+#' plotly object providing a visualization of the ECDF for hotspot vs non-hotspots.
 #'
 #' @keywords internal
 #' @examples
@@ -265,9 +260,7 @@ plot_sigspot <- function(df1, df2) {
     plot.title = ggplot2::element_text(hjust = 0.5, size = 12)
   )
   plot2 <- plotly::ggplotly(plot2, tooltip =  c("text"))
-  output <- c()
-  output[[1]] <- plot1
-  output[[2]] <- plot2
+  output <- list(plot1, plot2)
   return(output)
 }
 
@@ -314,9 +307,9 @@ plot_sigspot <- function(df1, df2) {
 #' @return A list containing the following:
 #' 1. dataframe containing the genomic regions with significant
 #' mutation frequency
-#' 2. Dotplot showing the percentage of samples with mutations in each ranked
+#' 2. plotly object Dotplot showing the percentage of samples with mutations in each ranked
 #' genomic region, highlighting significantly mutated hotspots
-#' 3. ECDF plot showing the difference in mutation frequency between hotspots
+#' 3. plotly object ECDF plot showing the difference in mutation frequency between hotspots
 #' and non-hotspots
 #'
 #'
@@ -399,14 +392,24 @@ find_hotspots <-
       stop("input data must contain column 'Count', or set rank = TRUE")
     }
     if (base::isTRUE(rank)) {
-      regions <- spot_rank(data, regions, include_genes = include_genes)
+      regions <-
+        data.table::rbindlist(
+          lapply(
+            seq_len(nrow(regions)),
+            spot_rank,
+            data = data,
+            regions = regions,
+            include_genes = include_genes
+          )
+        )
+      regions <- regions[order(-regions$Count), ]
     }
     pv <- pvalue - 1
     d <- threshold + 1
     i <- 1
     while (pv < pvalue & d > threshold) {
-      reg1 <- regions[seq_len(i),]
-      reg2 <- regions[(i + 1):nrow(regions),]
+      reg1 <- regions[seq_len(i), ]
+      reg2 <- regions[(i + 1):nrow(regions), ]
       reg1_list <- unlist(lapply(
         unique(data$Sample),
         region_counter,
@@ -439,7 +442,7 @@ find_hotspots <-
       rep("Non-hotspot", nrow(subset(
         regions, percent < perc_cutoff
       ))))
-
+    
     labels <-
       lapply(seq_len(nrow(regions)),
              create_labels,
@@ -447,9 +450,6 @@ find_hotspots <-
              include_genes = include_genes)
     regions$Label <- unlist(labels)
     plots <- plot_sigspot(regions, ecdf_df)
-    return_list <- c()
-    return_list[[1]] <- regions
-    return_list[[2]] <- plots[[1]]
-    return_list[[3]] <- plots[[2]]
+    return_list <- list(regions, plots[[1]], plots[[2]])
     return(return_list)
   }

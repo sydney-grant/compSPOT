@@ -38,7 +38,7 @@ a list containing the following:
 \enumerate{
 \item A dataframe with the hotspot, group, and mutation count from input
 sample name
-\item A violin plot comparing the mutation frequency per sample in groups as
+\item A plotly object violin plot comparing the mutation frequency per sample in groups as
 given by "name1" and "name2" variables
 \item An array of ECDF plots comparing the mutation frequency per sample in
 groups as given by "name1" and "name2" variables

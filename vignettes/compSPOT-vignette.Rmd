@@ -31,15 +31,14 @@ knitr::opts_chunk$set(
 )
 ```
 
-# seq.hotSPOT
 
-### Sydney R. Grant^1,2^, Ella Sampson^1^, Rhea Rodrigues^1,2^, Gyorgy Paragh^1,2^
+
+# Introduction
+
+Sydney R. Grant^1,2^, Ella Sampson^1^, Rhea Rodrigues^1,2^, Gyorgy Paragh^1,2^
 
 ^1^Department of Dermatology, Roswell Park Comprehensive Cancer Center, Buffalo, NY
 ^2^Department of Cell Stress Biology, Roswell Park Comprehensive Cancer Center, Buffalo, NY
-
-
-## Introduction
 
 Clonal cell groups share common mutations within cancer, precancer, and even 
 clinically normal appearing tissues. The frequency and location of these 
@@ -66,7 +65,7 @@ TCGA database to be used as input data in various cancer types. Additionally,
 the package `RTCGA.clinical` may be also used to identify highly mutated regions 
 in subsets of patients with specific clinical features of interest.
 
-## Installation & Setup
+# Installation & Setup
 
 ```{r, eval = FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE))
@@ -80,9 +79,9 @@ Load [*compSPOT*][]
 library(compSPOT)
 ```
 
-## Example Input Data
+# Example Input Data
 
-### Mutation Data
+## Mutation Data
 
 The mutation dataset should include the following columns:
 "Chromosome" <-- Chromosome number where the mutation is located
@@ -97,6 +96,9 @@ Loading example mutations:
 data("compSPOT_example_mutations")
 ```
 
+
+## Regions Data
+
 The regions dataset should include the following columns:
 "Chromosome" <-- Chromosome number where the region is located
 "Lowerbound" <-- Genomic position number where the region begins
@@ -110,7 +112,7 @@ Loading example regions:
 data("compSPOT_example_regions")
 ```
 
-## Example Workflow
+# Example Workflow
 
 The compSPOT package contains three main functions for (1) selection of 
 mutation hotspots (2) comparison of hotspot mutation burden between groups, 
@@ -119,7 +121,7 @@ risk factors. All functions return both numerical outputs based on analysis
 summary and data visualization components for quick and easy interpretation of 
 results.
 
-### Identifying Mutation Hotspots with find_hotspots
+## Identifying Mutation Hotspots with find_hotspots
 
 Our previously published Bioconductor package `seq.hotSPOT` 
 (doi: 10.3390/cancers15051612) identifies highly mutated genomic regions based 
@@ -157,7 +159,7 @@ head(significant_spots[[1]])
 ```
 
 
-### Comparison Mutation Hotspot Burden with compare_groups
+## Comparison Mutation Hotspot Burden with compare_groups
 
 Previously, we have shown mutation hotspots identified using seq.hotSPOT may be 
 used to differentiate between samples with history of frequent vs infrequent 
@@ -196,7 +198,7 @@ group_comp[[1]]
 ```
 
 
-### EDA of Mutation Hotspot Burden and Personal Risk Factors with compare_features 
+## EDA of Mutation Hotspot Burden and Personal Risk Factors with compare_features 
 
 Mutation enrichment in cancer mutation hotspots has been shown to relate to 
 personal cancer risk factors such as age, gender, and carcinogen exposure 

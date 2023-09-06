@@ -214,7 +214,7 @@ count_groups <-
 #' @param group2 a string containing the name of the second group
 #' for the comparison
 #'
-#' @return An interactive violin plot displaying the comparison of
+#' @return A plotly object violin plot displaying the comparison of
 #' mutation counts for each group.
 #'
 #' @keywords internal
@@ -260,7 +260,7 @@ plot_spot <- function(plot_data, group1, group2) {
 
 
 
-#' ECDF graph of hotspot mutation comparison
+#' ECDF plot of hotspot mutation comparison
 #'
 #' @description
 #' Based on a dataframe of hotspots, this function creates a ECDF plot to
@@ -275,7 +275,7 @@ plot_spot <- function(plot_data, group1, group2) {
 #' @param plot_data a dataframe containing the hotspot,
 #' mutation count, and associated groups
 #'
-#' @return An ECDF plot displaying the comparison of
+#' @return A ggplot object ECDF plot displaying the comparison of
 #' mutation counts for each group.
 #'
 #' @keywords internal
@@ -355,7 +355,7 @@ plot_ecdf <- function(spot, plot_data) {
 #' @return a list containing the following:
 #' 1. A dataframe with the hotspot, group, and mutation count from input
 #' sample name
-#' 2. A violin plot comparing the mutation frequency per sample in groups as
+#' 2. A plotly object violin plot comparing the mutation frequency per sample in groups as
 #' given by "name1" and "name2" variables
 #' 3. An array of ECDF plots comparing the mutation frequency per sample in
 #' groups as given by "name1" and "name2" variables
@@ -471,14 +471,16 @@ compare_groups <-
     )
     plot2_list <- lapply(unique(plot_data$Hotspot), plot_ecdf,
                          plot_data = plot_data)
-    return_items <- c()
-    return_items[[1]] <- all_diff
-    return_items[[2]] <-
-      plot <- plot_spot(plot_data, group1 = name1,
-                        group2 = name2)
-    return_items[[3]] <- ggpubr::ggarrange(plotlist = plot2_list,
-                                           nrow = 2,
-                                           ncol = ceiling(length(plot2_list)
-                                                          / 2))
+    plot <- plot_spot(plot_data, group1 = name1,
+                      group2 = name2)
+    return_items <-
+      list(all_diff,
+           plot,
+           ggpubr::ggarrange(
+             plotlist = plot2_list,
+             nrow = 2,
+             ncol = ceiling(length(plot2_list)
+                            / 2)
+           ))
     return(return_items)
   }
