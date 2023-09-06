@@ -3,8 +3,19 @@ data("compSPOT_example_regions")
 
 shuffled_regions <-
   compSPOT_example_regions[sample(1:nrow(compSPOT_example_regions)),]
-ranked_regions <- spot_rank(data = compSPOT_example_mutations,
-                            regions = shuffled_regions, include_genes = TRUE)
+
+regions <-
+  data.table::rbindlist(
+    lapply(
+      seq_len(nrow(shuffled_regions)),
+      spot_rank,
+      data = compSPOT_example_mutations,
+      regions = shuffled_regions,
+      include_genes = TRUE
+    )
+  )
+ranked_regions <- regions[order(-regions$Count), ]
+
 
 comp_values <- function(i, reg){
   v1 <- reg$Count[[i]]
